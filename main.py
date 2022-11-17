@@ -44,7 +44,7 @@ elif data_input_option == 2:
 else:
     pkg_dir = './data/'
     chosen_data_set = dataset_no
-    sub_sample = 1
+    sub_sample = 2
     nb_trajectories = 7
     Data = load_matlab_data(pkg_dir, chosen_data_set, sub_sample, nb_trajectories)
     Data = normalize_velocity_vector(Data)
@@ -72,7 +72,7 @@ if base == 0:
     }
 elif base == 1:
     sigma_0 = 0.1 * np.eye(int(dim/2+1))
-    sigma_0[-1, -1] = 10
+    sigma_0[-1, -1] = np.pi
     lambda_0 = {
         "nu_0": (dim/2+1) + 3,
         "kappa_0": 1,

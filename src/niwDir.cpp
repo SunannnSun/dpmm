@@ -101,10 +101,11 @@ T NIWDIR<T>::logProb(const Matrix<T,Dynamic,1>& x_i, const Matrix<T,Dynamic,Dyna
   Matrix<T,Dynamic,1>  x_i_dirrr(dim_-1); // just direction no position
   x_i_dirrr = x_i(seq(dim_-1, dim_));
 
-  // cout << x_k << endl;
-  // cout << karcherMean(x_k) << endl;
-
-  x_i_dir(dim_-1) = rie_log(x_i_dirrr, karcherMean(x_k)).sum();
+  // T z_value = rie_log(x_i_dirrr, karcherMean(x_k)).norm();
+  // if (z_value <= PI/4)
+  // x_i_dir(dim_-1) = 0;
+  // else
+  x_i_dir(dim_-1) = rie_log(x_i_dirrr, karcherMean(x_k)).norm();
 
 
   // cout << x_i_dirrr << endl;
