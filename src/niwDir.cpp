@@ -101,13 +101,15 @@ T NIWDIR<T>::logProb(const Matrix<T,Dynamic,1>& x_i, const Matrix<T,Dynamic,Dyna
   Matrix<T,Dynamic,1>  x_i_dirrr(dim_-1); // just direction no position
   x_i_dirrr = x_i(seq(dim_-1, dim_));
 
-  // T z_value = rie_log(x_i_dirrr, karcherMean(x_k)).norm();
-  // if (z_value <= PI/4)
-  // x_i_dir(dim_-1) = 0;
-  // else
-  x_i_dir(dim_-1) = rie_log(x_i_dirrr, karcherMean(x_k)).norm();
+  Matrix<T,Dynamic,1> karcher_mean = karcherMean(x_k);
+  T z_value = rie_log(x_i_dirrr, karcher_mean).norm();
+  if (z_value <= PI/4)
+  x_i_dir(dim_-1) = 0;
+  else
+  x_i_dir(dim_-1) = rie_log(x_i_dirrr, karcher_mean).norm();
 
-
+  T karcher_scatter = karcherScatter(x_k, karcher_mean);
+  sigma_(dim_-1, dim_-1) = sigma_(dim_-1, dim_-1) + karcher_scatter + karcher_mean.norm(); //((kappa_*count_)/(kappa_+count_))
   // cout << x_i_dirrr << endl;
 
   // std::cout << x_i << std::endl;
@@ -116,6 +118,10 @@ T NIWDIR<T>::logProb(const Matrix<T,Dynamic,1>& x_i, const Matrix<T,Dynamic,Dyna
   // using multivariate student-t distribution; missing terms?
   // https://en.wikipedia.org/wiki/Multivariate_t-distribution
   // https://www.cs.ubc.ca/~murphyk/Papers/bayesGauss.pdf pg.21
+
+  
+
+
   T doF = nu_ - dim_ + 1.;
   Matrix<T,Dynamic,Dynamic> scaledSigma = sigma_*(kappa_+1.)/(kappa_*(nu_-dim_+1));   
 

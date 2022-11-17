@@ -78,6 +78,20 @@ Matrix<T, Dynamic, 1> karcherMean(const Matrix<T,Dynamic, Dynamic>& x_k)
 };
 
 
+template<typename T>
+T karcherScatter(const Matrix<T,Dynamic, Dynamic>& x_k, const Matrix<T,Dynamic,1>& mean)
+{
+  T scatter;
+  Matrix<T, Dynamic, 1> x(x_k.cols()/2);   // x in tangent plane
+
+  for (int i=0; i<x_k.rows(); ++i)
+  {
+
+    x = x_k(i, seq(x_k.cols()/2, last)).transpose();
+    scatter = scatter + rie_log(mean, x).norm();
+  }
+  return scatter;
+};
 
 
 

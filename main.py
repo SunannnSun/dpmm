@@ -44,7 +44,7 @@ elif data_input_option == 2:
 else:
     pkg_dir = './data/'
     chosen_data_set = dataset_no
-    sub_sample = 2
+    sub_sample = 1
     nb_trajectories = 7
     Data = load_matlab_data(pkg_dir, chosen_data_set, sub_sample, nb_trajectories)
     Data = normalize_velocity_vector(Data)
