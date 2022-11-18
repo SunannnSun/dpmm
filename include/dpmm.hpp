@@ -9,6 +9,7 @@
 
 #include "niw.hpp"
 #include "global.hpp"
+#include "permutationArray.hpp"
 
 using namespace Eigen;
 using namespace std;
@@ -98,8 +99,10 @@ void DPMM<Dist_t>::initialize(const MatrixXd& x, int init_cluster)
 template <class Dist_t> 
 void DPMM<Dist_t>::sampleLabels()
 {
-  for(uint32_t i=0; i<N_; ++i)
+  vector<int> i_array = generateRandom(N_);
+  for(uint32_t j=0; j<N_; ++j)
   {
+    int i = i_array[j];
     // cout << "number of data point: " << i << endl;
     VectorXi Nk(K_);
     Nk.setZero();

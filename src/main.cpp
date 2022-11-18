@@ -3,7 +3,8 @@
 #include <Eigen/Core>
 #include <limits>
 #include "global.hpp"
-// #include "karcher.hpp"
+#include "permutationArray.hpp"
+
 
 using namespace std;
 using namespace Eigen;
@@ -28,8 +29,10 @@ int main ()
     // pi = pi / pi.sum();
     // cout << pi << endl;
 
-    int n = 8;
-    // generateRandom(n);
+    int n = 20;
+    for (auto const& c :   generateRandom(n))
+    std::cout << c << ' ';
+    // std::cout << generateRandom(n);
 
     return 0;
 }

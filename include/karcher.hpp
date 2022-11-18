@@ -8,7 +8,6 @@ using namespace Eigen;
 using namespace std;
 
 
-
 template <typename T>
 T unsigned_angle(const Matrix<T,Dynamic, 1>&u, const Matrix<T,Dynamic, 1>&v)
 {
