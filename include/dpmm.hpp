@@ -1,3 +1,5 @@
+#pragma once
+
 #include <iostream>
 #include <limits>
 #include <boost/random/uniform_01.hpp>

@@ -61,7 +61,9 @@ T NIW<T>::logProb(const Matrix<T,Dynamic,1>& x_i)
   // https://en.wikipedia.org/wiki/Multivariate_t-distribution
   // https://www.cs.ubc.ca/~murphyk/Papers/bayesGauss.pdf pg.21
   T doF = nu_ - dim_ + 1.;
-  Matrix<T,Dynamic,Dynamic> scaledSigma = sigma_*(kappa_+1.)/(kappa_*(nu_-dim_+1));                       
+  Matrix<T,Dynamic,Dynamic> scaledSigma = sigma_*(kappa_+1.)/(kappa_*(nu_-dim_+1));   
+  // scaledSigma(dim_-1, dim_-1) = sigma_(dim_-1, dim_-1); //testing the z-value effects if all zeros
+                    
   T logProb = boost::math::lgamma(0.5*(doF + dim_));
   logProb -= boost::math::lgamma(0.5*(doF));
   logProb -= 0.5*dim_*log(doF);

@@ -9,7 +9,7 @@ import random
 
 
 from scipy.special import logsumexp
-a = np.array([-10, 2])
+# a = np.array([-10, 2])
 # print(np.log(np.sum(np.exp(a))))
 # print(max(a) - logsumexp(a - max(a)))
 
@@ -20,10 +20,10 @@ parser = argparse.ArgumentParser(
 
 parser.add_argument('-i', '--input', type=int, default=3, help='Choose Data Input Option: 0 handrawn; 1 load handdrawn; 2 load matlab')
 parser.add_argument('-d', '--data', type=int, default=1, help='Choose Matlab Dataset, default=1')
-parser.add_argument('-t', '--iteration', type=int, default=50, help='Number of Sampler Iterations; default=50')
+parser.add_argument('-t', '--iteration', type=int, default=40, help='Number of Sampler Iterations; default=50')
 parser.add_argument('-a', '--alpha', type=float, default = 1, help='Concentration Factor; default=1')
-parser.add_argument('--init', type=int, default = 10, help='number of initial clusters, 0 is one cluster per data; default=10')
-parser.add_argument('--base', type=int, default = 0, help='sampling type; 0 is position; 1 is position+directional')
+parser.add_argument('--init', type=int, default = 1, help='number of initial clusters, 0 is one cluster per data; default=10')
+parser.add_argument('--base', type=int, default = 1, help='sampling type; 0 is position; 1 is position+directional')
 args = parser.parse_args()
 
 data_input_option = args.input
@@ -51,7 +51,6 @@ else:
 
 # Data = np.hstack((Data[:, 0:2], np.zeros((Data.shape[0], 1))))
 # Data = Data[:, 0:2]
-
 num, dim = Data.shape
 # print(Data)
 
@@ -71,10 +70,13 @@ if base == 0:
         "sigma_0":  sigma_0
     }
 elif base == 1:
-    sigma_0 = 0.1 * np.eye(int(dim/2+1))
-    sigma_0[-1, -1] = np.pi
+    # sigma_0 = np.zeros((int(dim/2+1), int(dim/2+1)))
+    # sigma_0[0:int(dim/2), 0:int(dim/2)] = np.cov(Data[:, 0:int(dim/2)].T)
+    sigma_0 = 4 * np.eye(int(dim/2+1))
+    sigma_0[-1, -1] = 1  # prevent feature dominance
+    # print(sigma_0)
     lambda_0 = {
-        "nu_0": (dim/2+1) + 3,
+        "nu_0": (dim/2+1) + 2,
         "kappa_0": 1,
         "mu_0": np.zeros(int(dim/2+1)),
         "sigma_0":  sigma_0
