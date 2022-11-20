@@ -104,14 +104,20 @@ T NIWDIR<T>::logProb(const Matrix<T,Dynamic,1>& x_i, const Matrix<T,Dynamic,Dyna
 
   Matrix<T,Dynamic,1> karcher_mean = karcherMean(x_k);
   T z_value = rie_log(x_i_dirrr, karcher_mean).norm();
-  // Prevent over-segmentation
-  if (z_value <= PI/4)
-  x_i_dir(dim_-1) = 0;
-  else
-  x_i_dir(dim_-1) = 10000;  //
-  // x_i_dir(dim_-1) =z_value;  //
+  T karcher_scatter = karcherScatter(x_k, karcher_mean);
+  T karcher_variance = karcherVariance(x_k, karcher_mean);
+  // cout << karcher_scatter <<endl;
 
-  // T karcher_scatter = karcherScatter(x_k, karcher_mean);
+  // Prevent over-segmentation
+  // if (z_value <= PI/4)
+  // {
+  // // sigma_(dim_-1, dim_-1) = sigma_(dim_-1, dim_-1) + karcher_scatter + karcher_mean.norm(); //((kappa_*count_)/(kappa_+count_))
+  // x_i_dir(dim_-1) = 0;
+  // }
+  // else
+  // x_i_dir(dim_-1) = 10000;  //
+  x_i_dir(dim_-1) =z_value;  //
+
   // sigma_(dim_-1, dim_-1) = sigma_(dim_-1, dim_-1) + karcher_scatter + karcher_mean.norm(); //((kappa_*count_)/(kappa_+count_))
   // cout << x_i_dirrr << endl;
 
@@ -127,7 +133,6 @@ T NIWDIR<T>::logProb(const Matrix<T,Dynamic,1>& x_i, const Matrix<T,Dynamic,Dyna
 
   T doF = nu_ - dim_ + 1.;
   Matrix<T,Dynamic,Dynamic> scaledSigma = sigma_*(kappa_+1.)/(kappa_*(nu_-dim_+1));   
-      
   scaledSigma(dim_-1, dim_-1) = sigma_(dim_-1, dim_-1); 
   // std::cout << scaledSigma << std::endl;           
   // T logProb = 0;

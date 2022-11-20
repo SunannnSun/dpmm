@@ -2,6 +2,7 @@
 #include <iostream>
 #include <Eigen/Core>
 #include <limits>
+#include "karcher.hpp"
 #include "global.hpp"
 #include "permutationArray.hpp"
 
@@ -29,10 +30,17 @@ int main ()
     // pi = pi / pi.sum();
     // cout << pi << endl;
 
-    int n = 20;
-    for (auto const& c :   generateRandom(n))
-    std::cout << c << ' ';
-    // std::cout << generateRandom(n);
+    // int n = 20;
+    // for (auto const& c :   generateRandom(n))
+    // std::cout << c << ' ';
+
+    
+    MatrixXd a {{1, 2, cos(PI/2), sin(PI/2)}, {1, 2, cos(PI/2), sin(PI/2)},};
+    MatrixXd b {{1 ,2, cos(0), sin(0)}};
+    cout << karcherMean(a) << endl;
+    cout << karcherScatter(a, karcherMean(b)) << endl;
+    cout << karcherVariance(a, karcherMean(b));
+
 
     return 0;
 }

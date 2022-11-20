@@ -95,6 +95,23 @@ T karcherScatter(const Matrix<T,Dynamic, Dynamic>& x_k, const Matrix<T,Dynamic,1
 };
 
 
+template<typename T>
+T karcherVariance(const Matrix<T,Dynamic, Dynamic>& x_k, const Matrix<T,Dynamic,1>& mean)
+{
+  T scatter;
+  Matrix<T, Dynamic, 1> x(x_k.cols()/2);   // x in tangent plane
+
+  for (int i=0; i<x_k.rows(); ++i)
+  {
+
+    x = x_k(i, seq(x_k.cols()/2, last)).transpose();
+    scatter = scatter + rie_log(mean, x).norm();
+  }
+  T variance;
+  variance = 1.0 / x_k.rows() * scatter;
+  
+  return variance;
+};
 
 
 

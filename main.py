@@ -33,29 +33,33 @@ init_option       = args.init
 dataset_no        = args.data
 base              = args.base
 
+
+input_path = './data/human_demonstrated_trajectories.csv'
+output_path = './data/output.csv'
+
+
 if data_input_option == 1:
-    draw_data()
-    l, t, x, y = load_data()
-    Data = add_directional_features(l, t, x, y, if_normalize=True)
+    completed_process = subprocess.run('matlab -nodesktop -sd "~/dpmm/util/drawData" -batch demo_drawData', shell=True)
+    Data = np.genfromtxt('./data/human_demonstrated_trajectories_matlab.csv', dtype=float, delimiter=',')
+
 elif data_input_option == 2:
-    data_name = 'human_demonstrated_trajectories_1.dat'
-    l, t, x, y = load_data(data_name)
-    Data = add_directional_features(l, t, x, y, if_normalize=True)
+    Data = np.genfromtxt('./data/human_demonstrated_trajectories_matlab.csv', dtype=float, delimiter=',')
+
 else:
     pkg_dir = './data/'
     chosen_data_set = dataset_no
-    sub_sample = 1
+    sub_sample = 2
     nb_trajectories = 7
     Data = load_matlab_data(pkg_dir, chosen_data_set, sub_sample, nb_trajectories)
     Data = normalize_velocity_vector(Data)
+
 
 # Data = np.hstack((Data[:, 0:2], np.zeros((Data.shape[0], 1))))
 # Data = Data[:, 0:2]
 num, dim = Data.shape
 # print(Data)
 
-input_path = './data/human_demonstrated_trajectories.csv'
-output_path = './data/output.csv'
+
 with open(input_path, mode='w') as data_file:
     data_writer = csv.writer(data_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
     for i in range(Data.shape[0]):
@@ -73,7 +77,7 @@ elif base == 1:
     # sigma_0 = np.zeros((int(dim/2+1), int(dim/2+1)))
     # sigma_0[0:int(dim/2), 0:int(dim/2)] = np.cov(Data[:, 0:int(dim/2)].T)
     sigma_0 = 4 * np.eye(int(dim/2+1))
-    sigma_0[-1, -1] = 1  # prevent feature dominance
+    sigma_0[-1, -1] = 0.1  # prevent feature dominance
     # print(sigma_0)
     lambda_0 = {
         "nu_0": (dim/2+1) + 2,

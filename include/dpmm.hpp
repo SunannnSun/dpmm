@@ -101,6 +101,7 @@ void DPMM<Dist_t>::sampleLabels()
 {
   vector<int> i_array = generateRandom(N_);
   for(uint32_t j=0; j<N_; ++j)
+  // for(uint32_t i=0; i<N_; ++i)
   {
     int i = i_array[j];
     // cout << "number of data point: " << i << endl;
@@ -112,6 +113,8 @@ void DPMM<Dist_t>::sampleLabels()
     }
     // cout<< Nk << endl;
     VectorXd pi(K_+1); 
+    // VectorXd pi(K_); 
+
     VectorXd x_i;
     x_i = x_(i, all); //current data point x_i
 
@@ -140,8 +143,9 @@ void DPMM<Dist_t>::sampleLabels()
       else
       pi(k) = - std::numeric_limits<float>::infinity();
     }
-    // cout << pi << endl;
     pi(K_) = log(alpha_)-log(N_+alpha_) + H_.logProb(x_i);
+
+
     // cout << pi <<endl;
     // exit(1);
 

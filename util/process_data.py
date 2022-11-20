@@ -23,13 +23,18 @@ def add_directional_features(line_index, time_index, x_coord, y_coord, if_normal
             if np.all(pos_data[index, :] == pos_data[index-1, :]):
                 entry[index] = 0
         pos_data = pos_data[entry == 1, :]
+        
+        # pos_data[0, :] = savgol_filter(pos_data[0, :], 15, 1, mode='nearest')
+        # pos_data[1, :] = savgol_filter(pos_data[1, :], 15, 1, mode='nearest')
+        pos_data= savgol_filter(pos_data, 15, 1, mode='nearest')
+
 
         vel_data = np.zeros((pos_data.shape[0], 2))
         for index in np.arange(0, vel_data.shape[0]-1):
             vel_data[index, :] = (pos_data[index+1, :] - pos_data[index, :])
         vel_data[-1, :] = vel_data[-2, :]
 
-        vel_data = savgol_filter(vel_data, 15, 3, mode='nearest')
+        # vel_data = savgol_filter(vel_data, 15, 3, mode='nearest')
 
         if if_normalize:
             vel_data_norm = np.linalg.norm(vel_data, axis=1)
